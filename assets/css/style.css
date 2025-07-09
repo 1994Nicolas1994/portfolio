@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Quicksand:wght@300..700&display=swap');
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+
+* {
+    font-family: montserrat;
+}
+
+
+@theme {
+    --color-primary-100: rgb(237, 234, 250);
+    --color-primary-200: rgb(211, 206, 245);
+    --color-primary-300: rgb(174, 163, 237);
+    --color-primary-400: rgb(138, 123, 222);
+    --color-primary-500: rgb(113, 98, 202);
+    /* Original */
+    --color-primary-600: rgb(93, 80, 170);
+    --color-primary-700: rgb(74, 63, 140);
+    --color-primary-800: rgb(58, 49, 110);
+    --color-primary-900: rgb(45, 38, 85);
+    --color-primary-1000: rgb(32, 28, 62);
+
+    --color-secondary-100: rgb(228, 245, 250);
+    --color-secondary-200: rgb(195, 233, 245);
+    --color-secondary-300: rgb(153, 215, 235);
+    --color-secondary-400: rgb(116, 196, 225);
+    --color-secondary-500: rgb(89, 179, 211);
+    /* Original */
+    --color-secondary-600: rgb(67, 150, 181);
+    --color-secondary-700: rgb(49, 120, 150);
+    --color-secondary-800: rgb(36, 90, 114);
+    --color-secondary-900: rgb(26, 66, 83);
+    --color-secondary-1000: rgb(17, 43, 55);
+
+    --color-third-100: rgb(254, 236, 231);
+    --color-third-200: rgb(252, 208, 199);
+    --color-third-300: rgb(250, 177, 160);
+    --color-third-400: rgb(248, 155, 136);
+    --color-third-500: rgb(246, 139, 117);
+    /* Original */
+    --color-third-600: rgb(224, 119, 100);
+    --color-third-700: rgb(195, 96, 80);
+    --color-third-800: rgb(158, 76, 62);
+    --color-third-900: rgb(123, 58, 47);
+    --color-third-1000: rgb(90, 41, 33);
+
+
+}
