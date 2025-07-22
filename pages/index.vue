@@ -22,7 +22,7 @@
 
   <!-- Hamburger für Mobile -->
   <button
-    class="lg:hidden ml-auto mx-5 focus:outline-none"
+    class="lg:hidden ml-auto focus:outline-none"
     @click="showMobileNav = !showMobileNav"
     aria-label="Menü öffnen"
   >
@@ -102,7 +102,8 @@ const config = useRuntimeConfig()
 const showMobileNav = ref(false)
 
 const { data: response, pending, error } = await useFetch(
-  `${config.public.strapiUrl}/api/onepage?populate[onepagecontent][on][banner.banner][populate][image]=true&populate[onepagecontent][on][banner.banner][populate][button]=true&populate[onepagecontent][on][banner.banner][populate][tech][populate]=tech&populate[onepagecontent][on][grid.reihe][populate][TextImage][populate]=image&populate[onepagecontent][on][text.text]=true&populate[onepagecontent][on][spacer.spacer]=true&populate[onepagecontent][on][angebot.angebot][populate][angebote]=true`,
+  `${config.public.strapiUrl}/api/onepage?populate[onepagecontent][on][banner.banner][populate][image]=true&populate[onepagecontent][on][banner.banner][populate][button]=true&populate[onepagecontent][on][banner.banner][populate][tech][populate]=tech&populate[onepagecontent][on][text-image.text-mit-bild][populate][image]=true&populate[onepagecontent][on][grid.reihe][populate][TextImage][populate][image]=true&populate[onepagecontent][on][text.text]=true&populate[onepagecontent][on][spacer.spacer]=true&populate[onepagecontent][on][angebot.angebot][populate][angebote]=true
+`,
   { server: true }
 )
 
