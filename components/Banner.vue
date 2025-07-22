@@ -52,13 +52,17 @@ const props = defineProps({ data: Object })
 const imageUrl = ref('')
 
 onMounted(() => {
-  const strapiBaseUrl = useRuntimeConfig().public.strapiUrl?.toString() || ''
-  if (props.data?.image?.url) {
-    imageUrl.value = strapiBaseUrl + props.data.image.url
-  } else if (props.data?.image?.data?.attributes?.url) {
-    imageUrl.value = strapiBaseUrl + props.data.image.data.attributes.url
+  const strapiBaseUrl = useRuntimeConfig().public.strapiUrl.replace(/\/$/, '') // 🔥 entfernt abschliessenden Slash
+
+  const imagePath =
+    props.data?.image?.url ||
+    props.data?.image?.data?.attributes?.url
+
+  if (imagePath) {
+    imageUrl.value = strapiBaseUrl + imagePath
   }
 })
+
 
 function handleButtonClick(url) {
   if (!url) return

@@ -41,14 +41,20 @@
 
 <script setup>
 const props = defineProps({ item: Object })
+
+// Hole die Runtime Config (aus nuxt.config.ts oder .env)
 const { public: { strapiUrl } } = useRuntimeConfig()
 
+// Entfernt abschliessenden Slash (z.B. https://domain.com/ → https://domain.com)
+const baseUrl = strapiUrl.replace(/\/$/, '')
+
+// Liefert vollständige Bild-URL zurück
 const getImageUrl = (image) => {
-  return image.formats?.medium?.url
-    ? strapiUrl + image.formats.medium.url
-    : strapiUrl + image.url
+  const path = image.formats?.medium?.url || image.url
+  return baseUrl + path
 }
 
+// Prüft, ob der Link extern ist
 function isExternal(url) {
   return /^https?:\/\//.test(url)
 }
