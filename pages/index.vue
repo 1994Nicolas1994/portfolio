@@ -6,30 +6,26 @@
       v-for="block in blockNav"
       :key="block.id"
       :href="'#' + block.id"
-      class="hover:text-secondary-1000 transition"
+      :class="[
+        'transition hover:text-secondary-1000',
+        currentSection === block.id ? 'text-secondary-800' : ''
+      ]"
       @click="handleNavClick(block.id)"
     >
       {{ block.label }}
-    </a>
-    <a
-      href="#kontakt"
-      class="hover:text-secondary-1000 transition"
-      @click.prevent="scrollToAnchor('kontakt')"
-    >
-      Kontakt
     </a>
   </nav>
 
   <!-- Hamburger für Mobile -->
   <button
-    class="lg:hidden ml-auto focus:outline-none"
-    @click="showMobileNav = !showMobileNav"
-    aria-label="Menü öffnen"
-  >
-    <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
-    </svg>
-  </button>
+  class="lg:hidden ml-auto pr-2 focus:outline-none"
+  @click="showMobileNav = !showMobileNav"
+  aria-label="Menü öffnen"
+>
+  <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+  </svg>
+</button>
 
   <!-- Mobile Offcanvas -->
   <transition name="fade">
@@ -48,49 +44,43 @@
         v-for="block in blockNav"
         :key="block.id"
         :href="'#' + block.id"
-        class="underline hover:no-underline"
+        :class="[
+          'underline hover:no-underline',
+          currentSection === block.id ? 'text-white underline' : ''
+        ]"
         @click="scrollToAnchor(block.id); showMobileNav = false"
       >
         {{ block.label }}
-      </a>
-      <a
-        href="#kontakt"
-        class="underline hover:no-underline"
-        @click.prevent="scrollToAnchor('kontakt'); showMobileNav = false"
-      >
-        Kontakt
       </a>
     </nav>
   </transition>
 </header>
 
-  
-
-
-  <main class="pt-14 lg:pt-14">
-    <div v-if="pending" class="w-full flex items-center justify-center py-32">
-      <span class="text-xl font-semibold animate-pulse">Lädt…</span>
-    </div>
-    <template v-else>
-      <component
-        v-for="(block, index) in content"
-        :is="resolveComponent(block.__component)"
-        :key="index"
-        :data="block"
-        :id="blockNav.find(b => b && b.label === block.navTitle)?.id"
-      />
+<main class="pt-14 lg:pt-14">
+  <div v-if="pending" class="w-full flex items-center justify-center py-32">
+    <span class="text-xl font-semibold animate-pulse">Lädt…</span>
+  </div>
+  <template v-else>
+    <component
+      v-for="(block, index) in content"
+      :is="resolveComponent(block.__component)"
+      :key="index"
+      :data="block"
+      :id="blockNav.find(b => b && b.label === block.navTitle)?.id"
+    />
+    <div id="kontakt">
       <ContactForm />
-    </template>
+    </div>
+  </template>
+</main>
 
-  </main>
-
-  <footer class="p-4 bg-secondary-500 text-white">
-    Nicolas Michel | Schwarztorstrasse 105 3007 Bern | © 2025 
-  </footer>
+<footer class="p-4 bg-secondary-500 text-white">
+  Nicolas Michel | Schwarztorstrasse 105 3007 Bern | © 2025 
+</footer>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import Banner from '@/components/Banner.vue'
 import GridReihe from '@/components/GridReihe.vue'
 import TextBlock from '@/components/Text.vue'
@@ -98,8 +88,8 @@ import Spacer from '@/components/Spacer.vue'
 import Angebot from '@/components/Angebot.vue'
 
 const config = useRuntimeConfig()
-
 const showMobileNav = ref(false)
+const currentSection = ref('')
 
 const strapiUrl = config.public.strapiUrl.replace(/\/$/, '')
 
@@ -108,26 +98,47 @@ const { data: response, pending, error } = await useFetch(
   { server: true }
 )
 
-
 const content = computed(() => response.value?.data?.onepagecontent || [])
 
-const blockNav = computed(() =>
-  content.value
+const blockNav = computed(() => {
+  const navBlocks = content.value
     .map((block, idx) => {
       if (!block.navTitle) return null
       let id = (
         block.navTitle + '-' + idx
       )
-        .toString()
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/(^-|-$)/g, '')
       return { id, label: block.navTitle }
     })
     .filter(Boolean)
-)
 
-// Smooth Scroll-Handler
+  // Kontakt-Block manuell ergänzen
+  navBlocks.push({ id: 'kontakt', label: 'Kontakt' })
+
+  return navBlocks
+})
+
+// Active Section Tracken
+onMounted(() => {
+  const updateCurrentSection = () => {
+    for (const block of blockNav.value) {
+      const el = document.getElementById(block.id)
+      if (el) {
+        const rect = el.getBoundingClientRect()
+        if (rect.top <= 120 && rect.bottom >= 120) {
+          currentSection.value = block.id
+          break
+        }
+      }
+    }
+  }
+
+  updateCurrentSection()
+  window.addEventListener('scroll', updateCurrentSection)
+})
+
 function scrollToAnchor(id) {
   const el = document.getElementById(id)
   if (el) {
@@ -135,14 +146,13 @@ function scrollToAnchor(id) {
   }
 }
 
-// Desktop: Prevent Standard-Jump, use smooth
 function handleNavClick(id) {
   scrollToAnchor(id)
-  // Scrollbar-URL updaten, aber kein harter Jump:
   if (window.location.hash !== '#' + id) {
     history.replaceState(null, '', '#' + id)
   }
 }
+
 function resolveComponent(type) {
   const map = {
     'banner.banner': Banner,

@@ -1,39 +1,40 @@
 <template>
-  <section class="relative min-h-screen flex flex-col justify-center bg-gradient-to-b from-[#edeaf8] via-white via-40% to-[#edeaf8] overflow-hidden">
-    <div class="w-full relative z-10 flex-1 flex flex-col justify-center">
-      <BaseHeading level="2" class="container mx-auto text-[#2d214a] font-extrabold flex items-center gap-4 mb-4">
-        <span class="w-2 h-8 bg-[#8375b7] rounded-full"></span>
-        {{ data.title }}
-      </BaseHeading>
-      <div class="container mx-auto">
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
-          <TransitionGroup name="bounce" tag="div" class="contents">
-            <div
-              v-for="item in data.angebote"
-              :key="item.id"
-              class="card-gradient bg-white/70 backdrop-blur-md rounded-2xl shadow-xl p-8 flex flex-col items-center text-center hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 min-h-[340px] group"
-            >
-              <span v-if="item.icon && iconMap[item.icon]" v-html="iconMap[item.icon]"
-                class="transition-transform duration-200 group-hover:scale-125"
-              ></span>
-              <h3 class="font-bold text-2xl mb-3 mt-2 text-secondary-500">{{ item.headline }}</h3>
-              <div class="text-[#2d214a] font-medium">
-                <template v-for="(desc, dIdx) in item.description" :key="dIdx">
-                  <p v-if="desc.type === 'paragraph'">
-                    <template v-for="(child, cIdx) in desc.children" :key="cIdx">
-                      {{ child.text }}
-                    </template>
-                  </p>
-                </template>
-              </div>
+  <section class="relative min-h-screen bg-gradient-to-b from-[#edeaf8] via-white via-40% to-[#edeaf8] overflow-hidden">
+    <div class="container mx-auto px-4 relative z-10 flex flex-col justify-center min-h-screen">
+      <Spacer />
+      <BaseHeading level="2">{{ data.title }}</BaseHeading>
+      <Spacer />
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
+        <TransitionGroup name="bounce" tag="div" class="contents">
+          <div
+            v-for="item in data.angebote"
+            :key="item.id"
+            class="card-gradient bg-white/70 backdrop-blur-md rounded-2xl shadow-xl p-8 flex flex-col items-center text-center hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 group"
+          >
+            <span v-if="item.icon && iconMap[item.icon]" v-html="iconMap[item.icon]"
+              class="transition-transform duration-200 group-hover:scale-125"
+            ></span>
+            <h3 class="font-bold text-2xl mb-3 mt-2 text-secondary-500">{{ item.headline }}</h3>
+            <div class="text-[#2d214a] font-medium">
+              <template v-for="(desc, dIdx) in item.description" :key="dIdx">
+                <p v-if="desc.type === 'paragraph'">
+                  <template v-for="(child, cIdx) in desc.children" :key="cIdx">
+                    {{ child.text }}
+                  </template>
+                </p>
+              </template>
             </div>
-          </TransitionGroup>
-        </div>
+          </div>
+        </TransitionGroup>
       </div>
+
+      <Spacer />
     </div>
 
-    <!-- CTA-Bereich mit abgesetztem Hintergrund -->
-    <div class="relative w-full bg-[#f7f5ff] shadow-inner py-14 flex flex-col items-center justify-center z-20">
+    <!-- CTA-Bereich -->
+    <div class="relative w-full bg-[#f7f5ff] shadow-inner py-14 flex flex-col items-center justify-center z-20 px-4">
+      <Spacer />
       <h3 class="text-2xl sm:text-3xl font-bold text-[#2d214a] mb-3 text-center">
         Bereit für dein Projekt?
       </h3>
@@ -47,9 +48,10 @@
       >
         Projekt anfragen
       </a>
+      <Spacer />
     </div>
 
-    <!-- Fancy Blur Deko, wie vorher -->
+    <!-- Blur Deko -->
     <div class="absolute -top-32 -left-36 w-96 h-96 bg-[#5eb6cc]/30 rounded-full filter blur-3xl z-0"></div>
     <div class="absolute bottom-0 right-0 w-72 h-72 bg-[#8375b7]/20 rounded-full filter blur-2xl z-0"></div>
   </section>

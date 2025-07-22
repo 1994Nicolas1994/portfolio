@@ -3,15 +3,14 @@
     <div class="container mx-auto">
       <!-- Grid: ab md zwei Spalten, auf Mobile Bild oben, Text unten -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
-        <!-- Text links auf Desktop (col-start-1), Bild rechts (col-start-2) -->
+        <!-- Text -->
         <div class="space-y-6 flex flex-col items-center md:items-start order-2 md:order-1">
-          <TypewriterName v-if="data.Title"
-            :name="data.Title"
-          />
+          <TypewriterName v-if="data.Title" :name="data.Title" />
 
           <BaseMarkdown v-if="data.text" :text="data.text">
             {{ data.text }}
           </BaseMarkdown>
+
           <BaseButton
             v-if="data.button"
             class="mt-2"
@@ -24,9 +23,14 @@
             <TechLine v-if="data.tech" :data="data.tech" />
           </div>
         </div>
+
+        <!-- Bild -->
         <div
           v-if="imageUrl"
-          class="w-full flex justify-center order-1 md:order-2 mb-6 md:mb-0"
+          :class="[
+            'w-full flex justify-center order-1 md:order-2 mb-6 md:mb-0',
+            data.Title ? 'hidden md:flex' : 'flex'
+          ]"
         >
           <img
             :src="imageUrl"
@@ -60,16 +64,13 @@ function handleButtonClick(url) {
   if (!url) return
 
   if (url.startsWith('#')) {
-    // Interner Scroll-Anker
     const id = url.slice(1)
     const el = document.getElementById(id)
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
   } else {
-    // Externer Link oder neue Seite
     window.open(url, '_blank')
   }
 }
-
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="font-mono text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-primary-900 min-h-[3.5em]">
+  <div class="font-mono text-4xl text-center sm:text-center md:text-left sm:text-4xl md:text-4xl lg:text-5xl font-extrabold text-primary-900 min-h-[3.5em]">
     <span>{{ displayed }}</span><span class="blinking-cursor">|</span>
     <div class="text-base sm:text-xl mt-2 text-secondary-700" v-if="typedSubline || subline">
       <span v-if="typedSubline">{{ typedSubline }}</span>
