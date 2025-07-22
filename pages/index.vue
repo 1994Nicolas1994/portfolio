@@ -101,11 +101,13 @@ const config = useRuntimeConfig()
 
 const showMobileNav = ref(false)
 
+const strapiUrl = config.public.strapiUrl.replace(/\/$/, '')
+
 const { data: response, pending, error } = await useFetch(
-  `${config.public.strapiUrl}/api/onepage?populate[onepagecontent][on][banner.banner][populate][image]=true&populate[onepagecontent][on][banner.banner][populate][button]=true&populate[onepagecontent][on][banner.banner][populate][tech][populate]=tech&populate[onepagecontent][on][text-image.text-mit-bild][populate][image]=true&populate[onepagecontent][on][grid.reihe][populate][TextImage][populate][image]=true&populate[onepagecontent][on][text.text]=true&populate[onepagecontent][on][spacer.spacer]=true&populate[onepagecontent][on][angebot.angebot][populate][angebote]=true
-`,
+  `${strapiUrl}/api/onepage?populate[onepagecontent][on][banner.banner][populate][image]=true&populate[onepagecontent][on][banner.banner][populate][button]=true&populate[onepagecontent][on][banner.banner][populate][tech][populate]=tech&populate[onepagecontent][on][text-image.text-mit-bild][populate][image]=true&populate[onepagecontent][on][grid.reihe][populate][TextImage][populate][image]=true&populate[onepagecontent][on][text.text]=true&populate[onepagecontent][on][spacer.spacer]=true&populate[onepagecontent][on][angebot.angebot][populate][angebote]=true`,
   { server: true }
 )
+
 
 const content = computed(() => response.value?.data?.onepagecontent || [])
 
