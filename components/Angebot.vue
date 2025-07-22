@@ -12,9 +12,11 @@
             :key="item.id"
             class="card-gradient bg-white/70 backdrop-blur-md rounded-2xl shadow-xl p-8 flex flex-col items-center text-center hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 group"
           >
-            <span v-if="item.icon && iconMap[item.icon]" v-html="iconMap[item.icon]"
-              class="transition-transform duration-200 group-hover:scale-125"
-            ></span>
+            <component
+              v-if="item.icon && resolveIcon(item.icon)"
+              :is="resolveIcon(item.icon)"
+              class="h-12 w-12 mb-4 text-[#8375b7] group-hover:scale-125 transition-transform"
+            />
             <h3 class="font-bold text-2xl mb-3 mt-2 text-secondary-500">{{ item.headline }}</h3>
             <div class="text-[#2d214a] font-medium">
               <template v-for="(desc, dIdx) in item.description" :key="dIdx">
@@ -58,25 +60,12 @@
 </template>
 
 <script setup>
+import * as LucideIcons from 'lucide-vue-next'
+
 const props = defineProps({ data: Object })
 
-const iconMap = {
-  'code': `<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-4" fill="none" viewBox="0 0 24 24" stroke="#fff">
-    <rect x="2" y="4" width="20" height="16" rx="4" fill="#fff"/>
-    <path stroke="#8375b7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M16 18l6-6-6-6M8 6l-6 6 6 6"/>
-  </svg>`,
-  'clipboard-check': `<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-4" fill="none" viewBox="0 0 24 24" stroke="#fff">
-    <rect x="4" y="4" width="16" height="16" rx="4" fill="#fff"/>
-    <path stroke="#8375b7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2l4-4m1 7H5a2 2 0 01-2-2V7a2 2 0 012-2h2.586A2 2 0 0110 4h4a2 2 0 011.414.586L18 5.586A2 2 0 0120 7v10a2 2 0 01-2 2z"/>
-  </svg>`,
-  'light-bulb': `<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-4" fill="none" viewBox="0 0 24 24" stroke="#fff">
-    <circle cx="12" cy="10" r="7" fill="#fff" opacity="0.2"/>
-    <path stroke="#8375b7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 3a7 7 0 00-7 7c0 3.53 2.61 6.43 6 6.92V21h2v-4.08c3.39-.49 6-3.39 6-6.92a7 7 0 00-7-7z"/>
-  </svg>`,
-  'sparkles': `<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-4" fill="none" viewBox="0 0 24 24" stroke="#fff">
-    <circle cx="12" cy="12" r="10" fill="#fff" opacity="0.13"/>
-    <path stroke="#8375b7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5 9l2 2 4-4m6 6l2 2 4-4M9 13l2 2 4-4"/>
-  </svg>`
+function resolveIcon(name) {
+  return LucideIcons[name] || null
 }
 </script>
 
