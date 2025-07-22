@@ -66,8 +66,8 @@
 
 <script setup>
 import { ref } from 'vue'
-const config = useRuntimeConfig()
 
+const config = useRuntimeConfig()
 
 const form = ref({
   name: '',
@@ -85,7 +85,11 @@ const handleSubmit = async () => {
   error.value = false
 
   try {
-    const response = await fetch(`${config.public.strapiUrl}/api/kontakts`, {
+    // Verhindert doppelten Slash
+    const baseUrl = config.public.strapiUrl.replace(/\/$/, '')
+    const endpoint = `${baseUrl}/api/kontakts`
+
+    const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
