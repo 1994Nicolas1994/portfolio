@@ -1,50 +1,69 @@
 <template>
-  <header class="p-4 bg-secondary-500 text-white font-bold fixed w-screen z-50 flex items-center">
-    <!-- Hamburger für Mobile -->
-    <button
-      class="lg:hidden mr-2 focus:outline-none"
-      @click="showMobileNav = !showMobileNav"
-      aria-label="Menü öffnen"
+<header class="p-4 bg-secondary-500 text-white font-bold fixed w-screen z-50 flex items-center justify-between">
+  <!-- Desktop-Nav -->
+  <nav class="hidden lg:flex gap-4">
+    <a
+      v-for="block in blockNav"
+      :key="block.id"
+      :href="'#' + block.id"
+      class="hover:text-secondary-1000 transition"
+      @click="handleNavClick(block.id)"
     >
-      <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
-      </svg>
-    </button>
-    <!-- Desktop-Nav -->
-    <nav class="hidden lg:flex gap-4 w-full">
+      {{ block.label }}
+    </a>
+    <a
+      href="#kontakt"
+      class="hover:text-secondary-1000 transition"
+      @click.prevent="scrollToAnchor('kontakt')"
+    >
+      Kontakt
+    </a>
+  </nav>
+
+  <!-- Hamburger für Mobile -->
+  <button
+    class="lg:hidden ml-auto mx-5 focus:outline-none"
+    @click="showMobileNav = !showMobileNav"
+    aria-label="Menü öffnen"
+  >
+    <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+    </svg>
+  </button>
+
+  <!-- Mobile Offcanvas -->
+  <transition name="fade">
+    <nav
+      v-if="showMobileNav"
+      class="fixed inset-0 bg-secondary-900/80 flex flex-col items-center justify-center gap-6 text-2xl z-50 lg:hidden"
+      @click.self="showMobileNav = false"
+    >
+      <button
+        class="absolute top-6 right-8 text-white text-4xl"
+        @click="showMobileNav = false"
+      >
+        ✖
+      </button>
       <a
         v-for="block in blockNav"
         :key="block.id"
         :href="'#' + block.id"
-        class="hover:text-secondary-1000 transition"
-        @click="handleNavClick(block.id)"
+        class="underline hover:no-underline"
+        @click="scrollToAnchor(block.id); showMobileNav = false"
       >
         {{ block.label }}
       </a>
-    </nav>
-    <!-- Mobile Offcanvas -->
-    <transition name="fade">
-      <nav
-        v-if="showMobileNav"
-        class="fixed inset-0 bg-secondary-900/80 flex flex-col items-center justify-center gap-6 text-2xl z-50 lg:hidden"
-        @click.self="showMobileNav = false"
+      <a
+        href="#kontakt"
+        class="underline hover:no-underline"
+        @click.prevent="scrollToAnchor('kontakt'); showMobileNav = false"
       >
-        <button
-          class="absolute top-6 right-8 text-white text-4xl"
-          @click="showMobileNav = false"
-        >✖</button>
-        <a
-          v-for="block in blockNav"
-          :key="block.id"
-          :href="'#' + block.id"
-          class="underline hover:no-underline"
-          @click="scrollToAnchor(block.id); showMobileNav = false"
-        >
-          {{ block.label }}
-        </a>
-      </nav>
-    </transition>
-  </header>
+        Kontakt
+      </a>
+    </nav>
+  </transition>
+</header>
+
   
 
 
@@ -60,6 +79,7 @@
         :data="block"
         :id="blockNav.find(b => b && b.label === block.navTitle)?.id"
       />
+      <ContactForm />
     </template>
 
   </main>
@@ -75,13 +95,14 @@ import Banner from '@/components/Banner.vue'
 import GridReihe from '@/components/GridReihe.vue'
 import TextBlock from '@/components/Text.vue'
 import Spacer from '@/components/Spacer.vue'
+import Angebot from '@/components/Angebot.vue'
 
 const config = useRuntimeConfig()
 
 const showMobileNav = ref(false)
 
 const { data: response, pending, error } = await useFetch(
-  `${config.public.strapiUrl}/api/onepage?populate[onepagecontent][on][banner.banner][populate][image]=true&populate[onepagecontent][on][banner.banner][populate][button]=true&populate[onepagecontent][on][banner.banner][populate][tech][populate]=tech&populate[onepagecontent][on][grid.reihe][populate][TextImage][populate]=image&populate[onepagecontent][on][text.text]=true&populate[onepagecontent][on][spacer.spacer]=true`,
+  `${config.public.strapiUrl}/api/onepage?populate[onepagecontent][on][banner.banner][populate][image]=true&populate[onepagecontent][on][banner.banner][populate][button]=true&populate[onepagecontent][on][banner.banner][populate][tech][populate]=tech&populate[onepagecontent][on][grid.reihe][populate][TextImage][populate]=image&populate[onepagecontent][on][text.text]=true&populate[onepagecontent][on][spacer.spacer]=true&populate[onepagecontent][on][angebot.angebot][populate][angebote]=true`,
   { server: true }
 )
 
@@ -125,6 +146,7 @@ function resolveComponent(type) {
     'grid.reihe': GridReihe,
     'text.text': TextBlock,
     'spacer.spacer': Spacer,
+    'angebot.angebot': Angebot,
   }
   return map[type] || 'div'
 }

@@ -12,9 +12,14 @@
           <BaseMarkdown v-if="data.text" :text="data.text">
             {{ data.text }}
           </BaseMarkdown>
-          <BaseButton v-if="data.button" class="mt-2">
+          <BaseButton
+            v-if="data.button"
+            class="mt-2"
+            @click="handleButtonClick(data.button.url)"
+          >
             {{ data.button.label }}
           </BaseButton>
+
           <div class="pt-4 sm:pt-8 w-full flex justify-center md:justify-start">
             <TechLine v-if="data.tech" :data="data.tech" />
           </div>
@@ -50,4 +55,21 @@ onMounted(() => {
     imageUrl.value = strapiBaseUrl + props.data.image.data.attributes.url
   }
 })
+
+function handleButtonClick(url) {
+  if (!url) return
+
+  if (url.startsWith('#')) {
+    // Interner Scroll-Anker
+    const id = url.slice(1)
+    const el = document.getElementById(id)
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  } else {
+    // Externer Link oder neue Seite
+    window.open(url, '_blank')
+  }
+}
+
 </script>

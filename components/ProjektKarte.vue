@@ -11,16 +11,19 @@
     <div class="p-5">
       <h3 class="text-2xl font-bold text-gray-800 mb-3">{{ item.headline }}</h3>
       <p v-if="item.text" class="text-gray-600 leading-relaxed mb-4">{{ item.text }}</p>
+
       <div class="my-5">
         <a @click="$emit('click')" class="cursor-pointer underline">Mehr erfahren</a>
       </div>
 
-      <!-- Nur Router-Link für interne, sonst <a> für externe -->
+      <!-- Button mit stop modifier -->
       <router-link
         v-if="item.link && !isExternal(item.link)"
         :to="item.link"
       >
-        <BaseButton variant="secondary">Zum Projekt</BaseButton>
+        <BaseButton variant="secondary" @click.stop>
+          Zum Projekt
+        </BaseButton>
       </router-link>
       <a
         v-else-if="item.link"
@@ -28,7 +31,9 @@
         target="_blank"
         rel="noopener noreferrer"
       >
-        <BaseButton variant="secondary">Zum Projekt</BaseButton>
+        <BaseButton variant="secondary" @click.stop>
+          Zum Projekt
+        </BaseButton>
       </a>
     </div>
   </div>
