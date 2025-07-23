@@ -12,12 +12,14 @@
           </BaseMarkdown>
 
           <BaseButton
-            v-if="data.button"
-            class="mt-2"
-            @click="handleButtonClick(data.button.url)"
-          >
-            {{ data.button.label }}
-          </BaseButton>
+  v-if="data.button"
+  class="mt-2"
+  :icon="data.button.icon"
+  @click="handleButtonClick(data.button.url)"
+>
+  {{ data.button.label }}
+</BaseButton>
+
 
           <div class="pt-4 sm:pt-8 w-full flex justify-center md:justify-start">
             <TechLine v-if="data.tech" :data="data.tech" />

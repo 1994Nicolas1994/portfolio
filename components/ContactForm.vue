@@ -87,7 +87,7 @@ const handleSubmit = async () => {
   try {
     // Verhindert doppelten Slash
     const baseUrl = config.public.strapiUrl.replace(/\/$/, '')
-    const endpoint = `${baseUrl}/api/kontakts`
+    const endpoint = `${baseUrl}/api/kontakt/send`
 
     const response = await fetch(endpoint, {
       method: 'POST',
